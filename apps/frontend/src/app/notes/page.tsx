@@ -26,30 +26,45 @@ export default function NotesPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [content, setContent] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (!storedUsername) {
+      setError("Please log in to view your notes");
       router.push("/");
       return;
     }
+    setError(null);
     setUsername(storedUsername);
-    fetchNotes();
+    fetchNotes(storedUsername);
   }, [router]);
 
-  const fetchNotes = async () => {
+  const fetchNotes = async (currentUsername: string) => {
+    if (!currentUsername) {
+      setError("Username is required to fetch notes");
+      return;
+    }
     try {
-      const response = await fetch(`${API_URL}/notes/fetch/100/0`);
+      const response = await fetch(`${API_URL}/notes/fetch/${currentUsername}/100/0`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch notes');
+      }
       const data = await response.json();
       setNotes(data);
     } catch (error) {
+      setError("Error fetching notes. Please try again later.");
       console.error("Error fetching notes:", error);
     }
   };
 
   const createNote = async () => {
+    if (!username) {
+      setError("Username is required to create a note");
+      return;
+    }
     try {
       const response = await fetch(`${API_URL}/notes/create_note`, {
         method: "POST",
@@ -61,20 +76,29 @@ export default function NotesPage() {
           content: "",
         }),
       });
+      if (!response.ok) {
+        throw new Error('Failed to create note');
+      }
       const newNote = await response.json();
       setNotes([newNote, ...notes]);
       setSelectedNote(newNote);
       setContent("");
+      setError(null);
     } catch (error) {
+      setError("Error creating note. Please try again later.");
       console.error("Error creating note:", error);
     }
   };
 
   const updateNote = async () => {
     if (!selectedNote) return;
+    if (!username) {
+      setError("Username is required to update a note");
+      return;
+    }
 
     try {
-      await fetch(`${API_URL}/notes/update_note/${selectedNote.noteId}`, {
+      const response = await fetch(`${API_URL}/notes/update_note/${selectedNote.noteId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,6 +107,9 @@ export default function NotesPage() {
           content,
         }),
       });
+      if (!response.ok) {
+        throw new Error('Failed to update note');
+      }
       
       setNotes(
         notes.map((note) =>
@@ -91,25 +118,47 @@ export default function NotesPage() {
             : note
         )
       );
+      setError(null);
     } catch (error) {
+      setError("Error updating note. Please try again later.");
       console.error("Error updating note:", error);
     }
   };
 
   const deleteNote = async (noteId: string) => {
+    if (!username) {
+      setError("Username is required to delete a note");
+      return;
+    }
     try {
-      await fetch(`${API_URL}/notes/delete/${noteId}`, {
+      const response = await fetch(`${API_URL}/notes/delete/${noteId}`, {
         method: "DELETE",
       });
+      if (!response.ok) {
+        throw new Error('Failed to delete note');
+      }
       setNotes(notes.filter((note) => note.noteId !== noteId));
       if (selectedNote?.noteId === noteId) {
         setSelectedNote(null);
         setContent("");
       }
+      setError(null);
     } catch (error) {
+      setError("Error deleting note. Please try again later.");
       console.error("Error deleting note:", error);
     }
   };
+
+  if (error) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background">
+        <div className="text-center">
+          <p className="text-destructive mb-4">{error}</p>
+          <Button onClick={() => router.push("/")}>Go to Login</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-background">

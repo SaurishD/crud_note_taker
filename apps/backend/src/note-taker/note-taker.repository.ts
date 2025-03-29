@@ -58,8 +58,11 @@ export class NoteTakerRepository {
     });
   }
 
-  async fetchNotes(count: number, startIndex: number) {
+  async fetchNotes(userId: string, count: number, startIndex: number) {
     return await this.prisma.note.findMany({
+      where: {
+        userId: userId,
+      },
       skip: startIndex,
       take: count,
       orderBy: {

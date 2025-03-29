@@ -29,7 +29,7 @@ export class NoteTakerService {
     await this.noteTakerRepository.deleteMultipleNotes(noteIds);
   }
 
-  async fetchNotes(count: number, startIndex: number) {
-    return await this.noteTakerRepository.fetchNotes(count, startIndex);
+  async fetchNotes(userId: string, count: number, startIndex: number) {
+    return await this.noteTakerRepository.fetchNotes(userId, count, startIndex);
   }
 } 

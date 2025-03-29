@@ -39,11 +39,12 @@ export class NoteTakerController {
     await this.noteTakerService.deleteMultipleNotes(noteIds);
   }
 
-  @Get('fetch/:count/:startIndex')
+  @Get('fetch/:userId/:count/:startIndex')
   async fetchNotes(
+    @Param('userId') userId: string,
     @Param('count', ParseIntPipe) count: number,
     @Param('startIndex', ParseIntPipe) startIndex: number,
   ) {
-    return await this.noteTakerService.fetchNotes(count, startIndex);
+    return await this.noteTakerService.fetchNotes(userId, count, startIndex);
   }
 } 
