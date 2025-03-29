@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { PlusIcon } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 interface Note {
   noteId: string;
   content: string;
@@ -39,7 +41,7 @@ export default function NotesPage() {
 
   const fetchNotes = async () => {
     try {
-      const response = await fetch("http://localhost:3000/notes/fetch/100/0");
+      const response = await fetch(`${API_URL}/notes/fetch/100/0`);
       const data = await response.json();
       setNotes(data);
     } catch (error) {
@@ -49,20 +51,20 @@ export default function NotesPage() {
 
   const createNote = async () => {
     try {
-      const response = await fetch("http://localhost:3000/notes/create_note", {
+      const response = await fetch(`${API_URL}/notes/create_note`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userId: username,
-          content: "New note",
+          content: "",
         }),
       });
       const newNote = await response.json();
       setNotes([newNote, ...notes]);
       setSelectedNote(newNote);
-      setContent(newNote.content);
+      setContent("");
     } catch (error) {
       console.error("Error creating note:", error);
     }
@@ -72,7 +74,7 @@ export default function NotesPage() {
     if (!selectedNote) return;
 
     try {
-      await fetch(`http://localhost:3000/notes/update_note/${selectedNote.noteId}`, {
+      await fetch(`${API_URL}/notes/update_note/${selectedNote.noteId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,7 +98,7 @@ export default function NotesPage() {
 
   const deleteNote = async (noteId: string) => {
     try {
-      await fetch(`http://localhost:3000/notes/delete/${noteId}`, {
+      await fetch(`${API_URL}/notes/delete/${noteId}`, {
         method: "DELETE",
       });
       setNotes(notes.filter((note) => note.noteId !== noteId));
@@ -133,7 +135,7 @@ export default function NotesPage() {
               {notes.map((note) => (
                 <div
                   key={note.noteId}
-                  className={`p-4 cursor-pointer hover:bg-muted transition-colors ${
+                  className={`p-4 cursor-pointer hover:bg-muted transition-colors group ${
                     selectedNote?.noteId === note.noteId ? "bg-muted" : ""
                   }`}
                   onClick={() => {
@@ -143,7 +145,9 @@ export default function NotesPage() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1 mr-4">
-                      <p className="line-clamp-2 text-sm">{note.content}</p>
+                      <p className="line-clamp-2 text-sm">
+                        {note.content || "Empty note"}
+                      </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {new Date(note.updated_at).toLocaleDateString()}
                       </p>
@@ -197,6 +201,7 @@ export default function NotesPage() {
                 onChange={(e) => setContent(e.target.value)}
                 onBlur={updateNote}
                 placeholder="Start writing..."
+                autoFocus
               />
             </div>
           </>
