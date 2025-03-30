@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") + "?pgbouncer=true&connect_timeout=15"
+  url      = env("DATABASE_URL")
 }
 
 model User {
