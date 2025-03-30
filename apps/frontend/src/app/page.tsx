@@ -9,10 +9,33 @@ import { useAuth } from "@/context/AuthContext";
 export default function Home() {
   const [username, setUsername] = useState("");
   const router = useRouter();
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { login } = useAuth();
 
+    useEffect(() => {
+      // This runs only on the client side
+      
+    }, []);
+
   useEffect(() => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
@@ -38,12 +61,12 @@ export default function Home() {
             className="absolute w-1 h-1 bg-white rounded-full shadow-[0_0_2px_#fff,inset_0_0_1px_#fff,0_0_8px_#fff,0_0_20px_#fff]"
             animate={{
               x: [
-                Math.random() * window.innerWidth,
-                Math.random() * window.innerWidth,
+                Math.random() * windowSize.width,
+                Math.random() * windowSize.width,
               ],
               y: [
-                Math.random() * window.innerHeight,
-                Math.random() * window.innerHeight,
+                Math.random() * windowSize.height,
+                Math.random() * windowSize.height,
               ],
               scale: [1, 1.5, 1],
               opacity: [0.2, 1, 0.2],

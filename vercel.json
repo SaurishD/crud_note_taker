@@ -1,0 +1,33 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "apps/frontend/next.config.js",
+        "use": "@vercel/next",
+        "config": { "distDir": ".next" }
+      },
+      {
+        "src": "apps/backend/src/main.ts",
+        "use": "@vercel/node",
+        "config": { "includeFiles": ["apps/backend/dist/**"] }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "apps/backend/dist/main.js",
+        "headers": {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization"
+        }
+      },
+      {
+        "src": "/(.*)",
+        "dest": "apps/frontend",
+        "continue": true
+      }
+    ],
+    "buildCommand": "turbo run build",
+    "installCommand": "yarn install" 
+  }
