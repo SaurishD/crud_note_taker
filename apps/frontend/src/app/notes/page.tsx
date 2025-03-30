@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PlusIcon } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -161,7 +162,8 @@ export default function NotesPage() {
   }
 
   return (
-    <div className="flex h-screen bg-background">
+    <ProtectedRoute>
+      <div className="flex h-screen bg-background">
       {/* Sidebar */}
       <div className="w-80 border-r border-border flex flex-col">
         <div className="p-4 border-b border-border flex items-center justify-between">
@@ -261,5 +263,6 @@ export default function NotesPage() {
         )}
       </div>
     </div>
+    </ProtectedRoute>
   );
 } 

@@ -1,4 +1,5 @@
-import { Controller, Post, Get, Delete, Body, Param, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Body, Param, Query, ParseIntPipe, Req, UnauthorizedException } from '@nestjs/common';
+import { Request } from 'express';
 import { NoteTakerService } from './note-taker.service';
 
 @Controller('notes')
@@ -7,17 +8,25 @@ export class NoteTakerController {
 
   @Post('create_note')
   async createNote(
-    @Body('userId') userId: string,
+    @Req() req: Request,
     @Body('content') content: string,
   ) {
+    if (!req.user || !req.user['sub']) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+    const userId = req.user['sub'];
     return await this.noteTakerService.createNote(userId, content);
   }
 
   @Post('copy_note/:noteId')
   async copyNote(
+    @Req() req: Request,
     @Param('noteId') noteId: string,
-    @Body('userId') userId: string,
   ) {
+    if (!req.user || !req.user['sub']) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+    const userId = req.user['sub'];
     return await this.noteTakerService.copyNote(noteId, userId);
   }
 
@@ -41,10 +50,14 @@ export class NoteTakerController {
 
   @Get('fetch/:userId/:count/:startIndex')
   async fetchNotes(
-    @Param('userId') userId: string,
+    @Req() req: Request,
     @Param('count', ParseIntPipe) count: number,
     @Param('startIndex', ParseIntPipe) startIndex: number,
   ) {
+    if (!req.user || !req.user['sub']) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+    const userId = req.user['sub'];
     return await this.noteTakerService.fetchNotes(userId, count, startIndex);
   }
 } 
