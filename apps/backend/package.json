@@ -30,7 +30,6 @@
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/client": "^6.5.0",
     "@vercel/node": "^5.1.14",
-    "db": "*",
     "cookie-parser": "^1.4.7",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
