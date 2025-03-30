@@ -4,6 +4,9 @@
         "NODE_ENV": "production"
       }
     },
-    "installCommand": "yarn install --check-files"
+    "installCommand": "yarn install --check-files",
+    "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://your-backend.vercel.app/api/$1" }
+  ]
   }
   
