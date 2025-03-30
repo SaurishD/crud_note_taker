@@ -24,7 +24,7 @@ export class AuthController {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
     
-    res.redirect(process.env.FRONTEND_URL || 'http://localhost:3002/notes');
+    res.redirect(process.env.FRONTEND_URL+'notes' || 'http://localhost:3002/notes');
   }
 
     @Get('me')
