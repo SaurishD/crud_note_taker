@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { PlusIcon } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { useAuth } from "@/context/AuthContext";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -30,18 +31,20 @@ export default function NotesPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    if (!storedUsername) {
+    const storedUsername = user?.userId
+    console.log("User in notes:", user, isAuthenticated)
+    if (!isAuthenticated || !storedUsername) {
       setError("Please log in to view your notes");
-      router.push("/");
+      
       return;
     }
     setError(null);
     setUsername(storedUsername);
     fetchNotes(storedUsername);
-  }, [router]);
+  }, [isAuthenticated]);
 
   const fetchNotes = async (currentUsername: string) => {
     if (!currentUsername) {
@@ -49,7 +52,9 @@ export default function NotesPage() {
       return;
     }
     try {
-      const response = await fetch(`${API_URL}/notes/fetch/${currentUsername}/100/0`);
+      const response = await fetch(`${API_URL}/notes/fetch/${currentUsername}/100/0`, {
+        credentials: "include",
+      });
       if (!response.ok) {
         throw new Error('Failed to fetch notes');
       }
@@ -69,6 +74,7 @@ export default function NotesPage() {
     try {
       const response = await fetch(`${API_URL}/notes/create_note`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -101,6 +107,7 @@ export default function NotesPage() {
     try {
       const response = await fetch(`${API_URL}/notes/update_note/${selectedNote.noteId}`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -134,6 +141,7 @@ export default function NotesPage() {
     try {
       const response = await fetch(`${API_URL}/notes/delete/${noteId}`, {
         method: "DELETE",
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error('Failed to delete note');

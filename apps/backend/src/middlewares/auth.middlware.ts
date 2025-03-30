@@ -7,18 +7,22 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private jwtService: JwtService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
-    const token = req.cookies['access_token'];
-    
+    const token = req.cookies.access_token;
+    console.log("Request: ",req.originalUrl)
+  
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
-
+    
     try {
-      const payload = this.jwtService.verify(token);
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET ?? "super_secret_jwt_key_for_development_only_2025"
+      });
       req['user'] = payload; // Attach user to request
       next();
     } catch (error) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      console.log(error.message)
+      return res.status(401).json({ message: 'Unauthorized' + error.message });
     }
   }
 }

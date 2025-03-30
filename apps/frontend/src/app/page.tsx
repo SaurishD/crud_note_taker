@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Home() {
   const [username, setUsername] = useState("");
   const router = useRouter();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { login } = useAuth();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -128,22 +129,15 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Input
-            type="text"
-            placeholder="Enter your username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full backdrop-blur-sm bg-background/50"
-          />
+          
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <Button
-              onClick={handleStart}
+              onClick={login}
               className="w-full relative overflow-hidden group"
               size="lg"
-              disabled={!username.trim()}
             >
               <motion.span
                 className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20"
@@ -156,7 +150,7 @@ export default function Home() {
                   ease: "linear",
                 }}
               />
-              <span className="relative">Start Taking Notes</span>
+              <span className="relative" onClick={login}>Start Taking Notes</span>
             </Button>
           </motion.div>
         </motion.div>

@@ -27,9 +27,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     profile: any,
     done: VerifyCallback,
   ): Promise<any> {
-
-    console.log("AccessToken",accessToken)
-    console.log("Profile", profile)
     if (!profile || !profile.emails || !profile.emails[0]) {
         console.log("Login failed")
         return

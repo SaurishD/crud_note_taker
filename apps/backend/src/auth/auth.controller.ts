@@ -16,8 +16,6 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req, @Res() res: Response) {
-    console.log('Google callback query:', req.query);
-    console.log('Google callback body:', req.body);
     const token = await this.authService.login(req.user);
     
     res.cookie('access_token', token.access_token, {
@@ -32,9 +30,8 @@ export class AuthController {
     @Get('me')
     @UseGuards(AuthGuard('jwt'))
     async getCurrentUser(@Req() req) {
-    // The user is already validated by JWT strategy
-    const user = await this.authService.getUser(req.user.userId);
-    return user;
+        const user = await this.authService.getUser(req.user.userId);
+        return user;
     }
 
   @Get('logout')

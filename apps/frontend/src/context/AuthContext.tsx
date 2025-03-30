@@ -29,12 +29,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuthStatus = async (): Promise<void> => {
         try {
-          const response = await fetch('/auth/me', {
+          const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/auth/me', {
             credentials: 'include' // Important: this sends cookies with the request
           });
-          
+          console.log("Response Recoreded:",response)
           if (response.ok) {
             const userData: User = await response.json();
+            console.log("UserData",userData)
             setUser(userData);
           } else {
             // Not authenticated
@@ -58,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       withCredentials: true,
     });
     setUser(null);
-    router.push('/login');
+    router.push('/');
   };
 
   return (

@@ -17,6 +17,6 @@ import { AuthMiddleware } from './middlewares/auth.middlware';
 export class AppModule {
   configure(consumer: MiddlewareConsumer){
     consumer.apply(cookieParser(), AuthMiddleware)
-    .forRoutes('notes')
+    .forRoutes('notes', 'auth/me')
   }
 }
