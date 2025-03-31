@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../../components/ui/button";
 import { PlusIcon } from "lucide-react";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { useAuth } from "@/context/AuthContext";
+import { ThemeToggle } from "../../components/theme-toggle";
+import { ProtectedRoute } from "../../components/ProtectedRoute";
+import { useAuth } from "../../context/AuthContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface Note {
   noteId: string;
@@ -52,7 +51,7 @@ export default function NotesPage() {
       return;
     }
     try {
-      const response = await fetch(`${API_URL}/notes/fetch/${currentUsername}/100/0`, {
+      const response = await fetch(`${NEXT_PUBLIC_API_URL}/notes/fetch/${currentUsername}/100/0`, {
         credentials: "include",
       });
       if (!response.ok) {
@@ -72,7 +71,7 @@ export default function NotesPage() {
       return;
     }
     try {
-      const response = await fetch(`${API_URL}/notes/create_note`, {
+      const response = await fetch(`${NEXT_PUBLIC_API_URL}/notes/create_note`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -105,7 +104,7 @@ export default function NotesPage() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/notes/update_note/${selectedNote.noteId}`, {
+      const response = await fetch(`${NEXT_PUBLIC_API_URL}/notes/update_note/${selectedNote.noteId}`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -139,7 +138,7 @@ export default function NotesPage() {
       return;
     }
     try {
-      const response = await fetch(`${API_URL}/notes/delete/${noteId}`, {
+      const response = await fetch(`${NEXT_PUBLIC_API_URL}/notes/delete/${noteId}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -160,9 +159,9 @@ export default function NotesPage() {
 
   if (error) {
     return (
-      <div className="flex h-screen items-center justify-center bg-background">
+      <div className="flex h-screen items-center justify-center bg-[hsl(var(--background))]">
         <div className="text-center">
-          <p className="text-destructive mb-4">{error}</p>
+          <p className="text-[hsl(var(--destructive))] mb-4">{error}</p>
           <Button onClick={() => router.push("/")}>Go to Login</Button>
         </div>
       </div>
@@ -171,10 +170,10 @@ export default function NotesPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex h-screen bg-background">
+      <div className="flex h-screen bg-[hsl(var(--background))]">
       {/* Sidebar */}
-      <div className="w-80 border-r border-border flex flex-col">
-        <div className="p-4 border-b border-border flex items-center justify-between">
+      <div className="w-80 border-r border-[hsl(var(--border))] flex flex-col">
+        <div className="p-4 border-b border-[hsl(var(--border))] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="font-semibold">Notes</h2>
             <ThemeToggle />
@@ -248,14 +247,14 @@ export default function NotesPage() {
       <div className="flex-1 flex flex-col">
         {selectedNote ? (
           <>
-            <div className="p-4 border-b border-border">
+            <div className="p-4 border-b border-[hsl(var(--border))]">
               <p className="text-sm text-muted-foreground">
                 Last updated: {new Date(selectedNote.updated_at).toLocaleString()}
               </p>
             </div>
             <div className="flex-1 p-4">
               <textarea
-                className="w-full h-full p-4 text-lg bg-background border-none focus:outline-none resize-none"
+                className="w-full h-full p-4 text-lg bg-[hsl(var(--background))] border-none focus:outline-none resize-none"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 onBlur={updateNote}

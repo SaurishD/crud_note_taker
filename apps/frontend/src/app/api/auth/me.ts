@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   try {
     const { data } = await axios.get(
-      `${process.env.API_URL}/auth/me`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
       {
         headers: {
           Cookie: req.headers.cookie || '',

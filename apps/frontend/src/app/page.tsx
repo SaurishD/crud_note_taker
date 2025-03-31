@@ -2,18 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { motion } from "framer-motion";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
-  const [username, setUsername] = useState("");
-  const router = useRouter();
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
   });
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+ 
   const { login } = useAuth();
 
     useEffect(() => {
@@ -35,21 +33,13 @@ export default function Home() {
     };
 
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+    
+      window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
-  const handleStart = () => {
-    if (username.trim()) {
-      localStorage.setItem("username", username);
-      router.push("/notes");
-    }
-  };
+  
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-black">
