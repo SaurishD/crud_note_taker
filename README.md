@@ -1,6 +1,7 @@
-# Note Taking Application
+# Note Taking Application 
 
 A full-stack note-taking application built with modern web technologies. This application allows users to create, read, update, and delete notes with a clean and intuitive interface.
+You can access the application [here](https://note-taker-app-kohl.vercel.app/)
 
 ## Tech Stack
 
