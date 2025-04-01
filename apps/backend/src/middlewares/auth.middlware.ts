@@ -11,7 +11,11 @@ export class AuthMiddleware implements NestMiddleware {
     console.log("Request: ",req.originalUrl)
   
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ 
+        message: 'Unauthorized - No token found', 
+        cookies: req.cookies,
+        headers: req.headers
+      });
     }
     
     try {

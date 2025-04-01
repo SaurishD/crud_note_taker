@@ -2,16 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "../components/ui/button";
+
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
+  const [username, setUsername] = useState("");
+  const router = useRouter();
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
   });
- 
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { login } = useAuth();
 
     useEffect(() => {
@@ -42,7 +45,7 @@ export default function Home() {
   
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black">
+    <main className="relative min-h-screen overflow-hidden bg-black ">
       {/* Animated background particles */}
       <div className="absolute inset-0 z-0">
         {[...Array(20)].map((_, i) => (
@@ -80,7 +83,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Interactive cursor follower */}
+     
       
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-24">
@@ -95,13 +98,13 @@ export default function Home() {
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           >
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-lg"
+              className="absolute inset-0 bg-gradient-to-r from-slate-500 to-zinc-500 rounded-lg opacity-80"
               whileHover={{ scale: 1.1, rotate: 180 }}
               transition={{ type: "spring" }}
             />
-            <div className="absolute inset-0 bg-background rounded-lg -rotate-3 flex items-center justify-center backdrop-blur-sm">
+            <div className="absolute inset-0 bg-black/100 rounded-lg -rotate-3 flex items-center justify-center backdrop-blur-sm border border-zinc-800">
               <motion.svg
-                className="w-24 h-24 text-primary"
+                className="w-24 h-24 text-slate-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -128,7 +131,7 @@ export default function Home() {
         </motion.div>
 
         <motion.h1
-          className="text-4xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
+          className="text-4xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-slate-300 to-zinc-300"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -149,11 +152,11 @@ export default function Home() {
           >
             <Button
               onClick={login}
-              className="w-full relative overflow-hidden group"
+              className="w-full relative overflow-hidden group bg-gradient-to-r from-slate-600 to-zinc-600 hover:from-slate-700 hover:to-zinc-700 text-white shadow-lg"
               size="lg"
             >
               <motion.span
-                className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20"
+                className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"
                 animate={{
                   x: [-100, 200],
                 }}
