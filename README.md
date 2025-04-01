@@ -1,84 +1,126 @@
-# Turborepo starter
+# Note Taking Application
 
-This Turborepo starter is maintained by the Turborepo core team.
+A full-stack note-taking application built with modern web technologies. This application allows users to create, read, update, and delete notes with a clean and intuitive interface.
 
-## Using this example
+## Tech Stack
 
-Run the following command:
+### Frontend
+- Next.js for the web application
+- TypeScript for type safety
+- Modern React patterns with hooks and context
+- Clean and responsive UI components
 
+### Backend
+- NestJS backend server
+- Prisma for database management
+- Authentication system
+- RESTful API endpoints for note management
+
+## Project Structure
+
+The project is organized as a monorepo using Turborepo with the following structure:
+
+### Apps
+- `frontend`: Next.js web application for the user interface
+- `backend`: NestJS server handling API requests and database operations
+
+### Features
+- User authentication and authorization
+- Create, read, update, and delete notes
+- Responsive design for mobile and desktop
+- Real-time updates
+- Secure API endpoints
+
+## Development
+
+This project uses Turborepo for monorepo management and pnpm as the package manager.
+
+### Setup and Installation
+
+1. Install dependencies:
 ```sh
-npx create-turbo@latest
+pnpm install
 ```
 
-## What's inside?
+2. Set up environment variables:
 
-This Turborepo includes the following packages/apps:
+Create `.env` files in both frontend and backend directories. Example values for production setup:
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
+#### Backend (.env)
 ```
-cd my-turborepo
-pnpm build
+# Database
+DATABASE_URL="postgresql://user:password@your-database-host:5432/your_database_name"
+
+# JWT
+JWT_SECRET="your_jwt_secret"
+
+# Google OAuth
+GOOGLE_CLIENT_ID="your_google_client_id"
+GOOGLE_CLIENT_SECRET="your_google_client_secret"
+GOOGLE_CALLBACK_URL="https://api.your-domain.com/api/auth/google/callback"
+
+# Frontend URL
+NEXT_PUBLIC_FRONTEND_URL="https://your-domain.com"
+FRONTEND_URL="https://your-domain.com/"
 ```
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
+#### Frontend (.env.local)
 ```
-cd my-turborepo
+NEXT_PUBLIC_API_URL="https://api.your-domain.com"
+NEXT_PUBLIC_FRONTEND_URL="https://your-domain.com"
+```
+
+Note: Example environment files are provided as `.env.example` in the backend directory and `.env.local.example` in the frontend directory. Copy these files and rename them to `.env` and `.env.local` respectively, then update the values according to your setup.
+
+For local development, use these URLs instead:
+- Backend API: `http://localhost:3000`
+- Frontend: `http://localhost:3002`
+- Google OAuth Callback: `http://localhost:3000/api/auth/google/callback`
+
+### Google OAuth Setup
+
+To enable Google authentication:
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Navigate to "APIs & Services" > "Credentials"
+4. Click "Create Credentials" > "OAuth 2.0 Client ID"
+5. Configure the OAuth consent screen:
+   - Add your application name
+   - Add authorized domains
+   - Save the configuration
+6. Create OAuth 2.0 credentials:
+   - Application type: Web application
+   - Name: Your app name
+   - Authorized JavaScript origins: `http://localhost:3002` (for development)
+   - Authorized redirect URIs: `http://localhost:3000/api/auth/google/callback`
+7. Copy the generated Client ID and Client Secret to your backend `.env` file
+
+Note: For production, update the URLs in both the Google Cloud Console and environment variables to your production domains.
+
+### Development Commands
+
+To develop all apps and packages:
+```sh
 pnpm dev
 ```
 
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+To build all apps and packages:
+```sh
+pnpm build
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+### Tools and Utilities
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+This project comes with several preconfigured tools:
 
+- TypeScript for static type checking
+- ESLint for code linting
+- Prettier for code formatting
+
+## Project Structure
 ```
-npx turbo link
+apps/
+  ├── frontend/     # Next.js web application
+  └── backend/      # NestJS server
 ```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
