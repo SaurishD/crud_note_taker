@@ -30,9 +30,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const checkAuthStatus = async (): Promise<void> => {
         try {
           const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/auth/me', {
-            credentials: 'include' // Important: this sends cookies with the request
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors'
           });
-          console.log("Response Recoreded:",response)
+          console.log("Response Recorded:", response);
           if (response.ok) {
             const userData: User = await response.json();
             console.log("UserData",userData)
