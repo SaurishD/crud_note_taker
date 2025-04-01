@@ -166,7 +166,7 @@ export default function Home() {
                   ease: "linear",
                 }}
               />
-              <span className="relative" onClick={login}>Start Taking Notes</span>
+              <span className="relative" onClick={login}>Login with google</span>
             </Button>
           </motion.div>
         </motion.div>

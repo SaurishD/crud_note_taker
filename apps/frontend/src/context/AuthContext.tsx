@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       };
     
     checkAuthStatus();
-  }, [user]);
+  }, []);
 
   const login = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;

@@ -9,10 +9,6 @@ export class AuthMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     const token = req.cookies.access_token;
-    logger.info(`Auth request to ${req.originalUrl}`, {
-      cookies: req.cookies,
-      headers: req.headers
-    });
   
     if (!token) {
       logger.warn('No access token found in request', {
