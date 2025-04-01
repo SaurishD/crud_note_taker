@@ -28,17 +28,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const checkAuthStatus = async (): Promise<void> => {
+      console.log("The cookie is",document.cookie)
         try {
           const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/auth/me', {
-            method: 'GET',
+            
             credentials: 'include',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            },
-            mode: 'cors'
+            
           });
-          console.log("Response Recorded:", response);
           if (response.ok) {
             const userData: User = await response.json();
             console.log("UserData",userData)
@@ -54,7 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       };
     
     checkAuthStatus();
-  }, []);
+  }, [user]);
 
   const login = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;

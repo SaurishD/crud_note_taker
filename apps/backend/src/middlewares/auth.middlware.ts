@@ -20,7 +20,8 @@ export class AuthMiddleware implements NestMiddleware {
         headers: req.headers
       });
       return res.status(401).json({ 
-        message: 'Unauthorized - No token found', 
+        message: 'Unauthorized - No token found in request', 
+        request_body: req,
         cookies: req.cookies,
         headers: req.headers
       });
